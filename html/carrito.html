@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monstruo Mercado</title>
+  <link rel="icon" href="../assets/monster.svg" />
+  <link rel="stylesheet" href="../css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/extra.css" />
+  <script src="../css/jquery-3.5.1.min.js"></script>
+  <script src="../css/bootstrap.min.js"></script>
+  <script src="../css/popper-2.4.4.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar sticky-top navbar-expand bg-light">
+    <a class="navbar-brand" href="index.html">
+      <img src="../assets/monster.svg" width="35" height="35" alt="logo monster" />
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link alert-dark disabled" href="productos.html">COMPRAR ON LINE</a>
+        </li>
+      </ul>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end d-none" id="navbarSupportedContent"></div>
+  </nav>
+  <!-- modal para confirmar o cancelar la compra -->
+  <div id="modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Su compra:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Confirmar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modalCancel">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-xl-7">
+          <table class="table table-dark" id="table"></table>
+        </div>
+
+        <div class="col-12 col-xl-5">
+          <div class="cart sticky-top" id="shoppingList">
+            <h3 class="heading text-center">Monstruo Mercado</h3>
+            <div class="cartHeader">
+              <span>Productos en su carrito</span>
+              <span class="total" id="total"></span>
+              <div class="btn">
+                <button class="btn btn-danger btn-sm" id="btnEmpty">
+                  Vaciar
+                </button>
+                <button type="button" id="btnConfirm" class="btn btn-success btn-sm" data-toggle="modal"
+                  data-target="#modal">
+                  Pagar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="text/javascript" src="../js/carrito.js"></script>
+  <script type="text/javascript" src="../js/elements.js"></script>
+</body>
+
+</html>
