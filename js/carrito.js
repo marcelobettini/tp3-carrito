@@ -70,6 +70,8 @@ function buildTableRows(data) {
     const precio = productos[ev.target.dataset.id - 1].precio;
     const qtty = 1;
     const newItem = { id, item, marca, presentacion, precio, qtty };
+    // console.log(tableEl.rows[id-1].cells[5].innerText)
+
     let idx = cartItem.findIndex((element) => {
       return element.id == id;
     });
@@ -82,7 +84,17 @@ function buildTableRows(data) {
       refreshCart();
       printCart();
     }
+    updateStock(id, btnShop);
   });
+}
+
+//actualiza stock provisoriamente en la tabla (no en el array ni en la base de datos)
+function updateStock(id, btnShop) {
+  if (tableEl.rows[id-1].cells[5].innerText == 0) {
+    btnShop.disabled = true;
+  } else {
+    tableEl.rows[id - 1].cells[5].innerText -= 1;
+  }
 }
 
 function printCart() {
@@ -93,8 +105,6 @@ function printCart() {
     itemEl.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}`;
     total += el.precio * el.qtty;
     totalEl.innerText = total;
-    console.log(itemEl);
-    console.log(totalEl.innerText);
     shoppingList.appendChild(itemEl);
   });
 }
@@ -107,6 +117,8 @@ function refreshCart() {
 function cancelCart() {
   refreshCart();
   cartItem = [];
+  tableEl.rows[id - 1].cells[5].innerText = productos[id-1].stock;
+  
 }
 
 function modalLoad() {
@@ -123,7 +135,7 @@ function modalLoad() {
 
 function modalClear() {
   modalBodyEl.querySelectorAll("p").forEach((node) => node.remove());
-  totalEl.innerText = null;  
-  cancelCart();  
+  totalEl.innerText = null;
+  cancelCart();
 }
 window.onload = getJSON();
