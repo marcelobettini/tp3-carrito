@@ -70,8 +70,6 @@ function buildTableRows(data) {
     const precio = productos[ev.target.dataset.id - 1].precio;
     const qtty = 1;
     const newItem = { id, item, marca, presentacion, precio, qtty };
-    // console.log(tableEl.rows[id-1].cells[5].innerText)
-
     let idx = cartItem.findIndex((element) => {
       return element.id == id;
     });
@@ -90,13 +88,14 @@ function buildTableRows(data) {
 
 //actualiza stock provisoriamente en la tabla (no en el array ni en la base de datos)
 function updateStock(id, btnShop) {
-  if (tableEl.rows[id-1].cells[5].innerText == 0) {
+  if (tableEl.rows[id - 1].cells[5].innerText == 0) {
     btnShop.disabled = true;
   } else {
     tableEl.rows[id - 1].cells[5].innerText -= 1;
   }
 }
 
+//carga el carrito
 function printCart() {
   const shoppingList = document.getElementById("shoppingList");
   let total = null;
@@ -109,6 +108,7 @@ function printCart() {
   });
 }
 
+//limpia el carrito
 function refreshCart() {
   shoppingList.querySelectorAll("p").forEach((node) => node.remove());
   totalEl.innerText = null;
@@ -116,11 +116,13 @@ function refreshCart() {
 
 function cancelCart() {
   refreshCart();
+  cartItem.forEach((e) => {
+    tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;
+  });
   cartItem = [];
-  tableEl.rows[id - 1].cells[5].innerText = productos[id-1].stock;
-  
 }
 
+//carga los productos del carrito en el modal
 function modalLoad() {
   let total = null;
   cartItem.forEach((el) => {
@@ -133,6 +135,7 @@ function modalLoad() {
   modalBodyEl.appendChild(totalEl);
 }
 
+//limpia el modal
 function modalClear() {
   modalBodyEl.querySelectorAll("p").forEach((node) => node.remove());
   totalEl.innerText = null;
