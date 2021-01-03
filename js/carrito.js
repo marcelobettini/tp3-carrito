@@ -52,10 +52,11 @@ function buildTableRows(data) {
     trEl.appendChild(tdEl);
     tbodyEl.appendChild(trEl);
   }
-  const btnShop = document.createElement("button"); //agrega btn Shop y su handler
+  const btnShop = document.createElement("button"); 
   const txtShop = document.createTextNode("Comprar");
   btnShop.classList.add("btn", "btn-success", "btn-sm", "m-1");
   btnShop.appendChild(txtShop);
+  btnShop.id="btnShop"
   btnShop.dataset.id = Number(data.id);
   if (data.stock <= 0) {
     btnShop.disabled = true;
@@ -118,6 +119,9 @@ function cancelCart() {
   refreshCart();
   cartItem.forEach((e) => {
     tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;
+    console.log(tableEl.rows[e.id - 1].lastChild.disabled = false)
+    
+
   });
   cartItem = [];
 }
@@ -139,6 +143,6 @@ function modalLoad() {
 function modalClear() {
   modalBodyEl.querySelectorAll("p").forEach((node) => node.remove());
   totalEl.innerText = null;
-  cancelCart();
+  cancelCart();  
 }
 window.onload = getJSON();
