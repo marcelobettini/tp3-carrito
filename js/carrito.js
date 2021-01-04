@@ -35,8 +35,7 @@ function getKeys(data) {
   return Object.keys(data[0]);
 }
 //construye el table head y tantas celdas header como claves haya en el array generado con getKeys()
-function buildThead(keyArray) {
-  let theadEl = document.createElement("thead");
+function buildThead(keyArray) {  
   for (let key in keyArray) {
     let thEl = document.createElement("th");
     thEl.innerHTML = keyArray[key].toUpperCase();
@@ -52,8 +51,7 @@ function buildTableRows(data) {
     tdEl.innerHTML = data[key];
     trEl.appendChild(tdEl);
     tbodyEl.appendChild(trEl);
-  }
-  tableEl.append(tbodyEl);
+  }  
   const btnShop = document.createElement("button");
   const txtShop = document.createTextNode("Comprar");
   btnShop.classList.add("btn", "btn-success", "btn-sm", "m-1");
@@ -64,6 +62,7 @@ function buildTableRows(data) {
     btnShop.disabled = true;
   }
   trEl.appendChild(btnShop);
+  tableEl.appendChild(tbodyEl);
   btnShop.addEventListener("click", (ev) => {
     id = ev.target.dataset.id;
     idCheck = id;
@@ -120,8 +119,7 @@ function refreshCart() {
 function cancelCart() {
   refreshCart();
   cartItem.forEach((e) => {
-    tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;
-    console.log((tableEl.rows[e.id - 1].lastChild.disabled = false));
+    tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;    
   });
   cartItem = [];
 }
@@ -152,7 +150,14 @@ function modalConfirm() {
     editStock(e.id, tableEl.rows[e.id - 1].cells[5].innerText);
   });
   tableEl.remove();
-  refreshCart();
+  cancelCart()
+  modalClear()
+  tableEl = null
+  theadEl = null
+  tbodyEl = null  
+  tableEl = document.createElement("table")
+  theadEl = document.createElement("thead");
+  tbodyEl = document.createElement("tbody");    
   getJSON();
 }
 
