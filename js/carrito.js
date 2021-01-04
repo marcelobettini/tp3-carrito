@@ -22,12 +22,13 @@ function getJSON() {
 
 //construye la tabla
 function buildTable(data) {
+  tableEl.classList.add("table", "table-dark");
+  tableContainerEl.append(tableEl);
   const keyArray = getKeys(data);
   buildThead(keyArray);
   data.forEach((e) => {
     buildTableRows(e);
   });
-  tableEl.append(tbodyEl);
 }
 //extrae las claves de un JSON y las retorna en un array
 function getKeys(data) {
@@ -52,11 +53,12 @@ function buildTableRows(data) {
     trEl.appendChild(tdEl);
     tbodyEl.appendChild(trEl);
   }
-  const btnShop = document.createElement("button"); 
+  tableEl.append(tbodyEl);
+  const btnShop = document.createElement("button");
   const txtShop = document.createTextNode("Comprar");
   btnShop.classList.add("btn", "btn-success", "btn-sm", "m-1");
   btnShop.appendChild(txtShop);
-  btnShop.id="btnShop"
+  btnShop.id = "btnShop";
   btnShop.dataset.id = Number(data.id);
   if (data.stock <= 0) {
     btnShop.disabled = true;
@@ -119,9 +121,7 @@ function cancelCart() {
   refreshCart();
   cartItem.forEach((e) => {
     tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;
-    console.log(tableEl.rows[e.id - 1].lastChild.disabled = false)
-    
-
+    console.log((tableEl.rows[e.id - 1].lastChild.disabled = false));
   });
   cartItem = [];
 }
@@ -143,6 +143,30 @@ function modalLoad() {
 function modalClear() {
   modalBodyEl.querySelectorAll("p").forEach((node) => node.remove());
   totalEl.innerText = null;
-  cancelCart();  
+  cancelCart();
+}
+
+//confirma la compra
+function modalConfirm() {
+  cartItem.forEach((e) => {
+    editStock(e.id, tableEl.rows[e.id - 1].cells[5].innerText);
+  });
+  tableEl.remove();
+  refreshCart();
+  getJSON();
+}
+
+//actualiza stock en el JSON original
+function editStock(index, stock) {
+  const slash = "/";
+  const id = productos[index - 1].id;
+  const combinedURL = url.concat(slash + id);
+  fetch(combinedURL, {
+    method: "PUT",
+    body: JSON.stringify({
+      stock: stock,
+    }),
+    headers: { "Content-Type": "application/JSON" },
+  }).then((response) => response.json());
 }
 window.onload = getJSON();

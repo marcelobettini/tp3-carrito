@@ -1,5 +1,6 @@
+const tableContainerEl = document.getElementById("table-container")
 const tbodyEl = document.createElement("tbody");
-const tableEl = document.getElementById("table");
+const tableEl = document.createElement("table")
 const shoppingListEl = document.getElementById("shoppingList");
 const itemQttyEl = document.createElement("p");
 const totalEl = document.getElementById("total");
@@ -13,3 +14,6 @@ const btnConfirmEl = document
 const modalCancelEl = document
   .getElementById("modalCancel")
   .addEventListener("click", modalClear);
+const modalConfirmEl = document
+  .getElementById("modalConfirm")
+  .addEventListener("click", modalConfirm);
