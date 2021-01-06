@@ -11,10 +11,11 @@ function getJSON() {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
+    .then((response) => response.json())
+    // .then(function (response) {
+    //   return response.json();
+    // })
+    .then((data) => {
       productos = data;
       buildTable(productos);
     });
@@ -35,7 +36,7 @@ function getKeys(data) {
   return Object.keys(data[0]);
 }
 //construye el table head y tantas celdas header como claves haya en el array generado con getKeys()
-function buildThead(keyArray) {  
+function buildThead(keyArray) {
   for (let key in keyArray) {
     let thEl = document.createElement("th");
     thEl.innerHTML = keyArray[key].toUpperCase();
@@ -51,7 +52,7 @@ function buildTableRows(data) {
     tdEl.innerHTML = data[key];
     trEl.appendChild(tdEl);
     tbodyEl.appendChild(trEl);
-  }  
+  }
   const btnShop = document.createElement("button");
   const txtShop = document.createTextNode("Comprar");
   btnShop.classList.add("btn", "btn-success", "btn-sm", "m-1");
@@ -119,13 +120,19 @@ function refreshCart() {
 function cancelCart() {
   refreshCart();
   cartItem.forEach((e) => {
-    tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;    
+    tableEl.rows[e.id - 1].cells[5].innerText = productos[e.id - 1].stock;
   });
   cartItem = [];
 }
 
 //carga los productos del carrito en el modal
 function modalLoad() {
+  const modalConfirmEl = document.getElementById("modalConfirm");
+  if (cartItem.length == 0) {
+    modalConfirmEl.disabled = true;
+  } else {
+    modalConfirmEl.disabled = false;
+  }
   let total = null;
   cartItem.forEach((el) => {
     const itemMdl = document.createElement("p");
@@ -150,14 +157,14 @@ function modalConfirm() {
     editStock(e.id, tableEl.rows[e.id - 1].cells[5].innerText);
   });
   tableEl.remove();
-  cancelCart()
-  modalClear()
-  tableEl = null
-  theadEl = null
-  tbodyEl = null  
-  tableEl = document.createElement("table")
+  cancelCart();
+  modalClear();
+  tableEl = null;
+  theadEl = null;
+  tbodyEl = null;
+  tableEl = document.createElement("table");
   theadEl = document.createElement("thead");
-  tbodyEl = document.createElement("tbody");    
+  tbodyEl = document.createElement("tbody");
   getJSON();
 }
 
