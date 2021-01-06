@@ -3,7 +3,7 @@
   padding: 0px;
   box-sizing: border-box;
 }
-.cartHeader {    
+.cartHeader {      
   background-color: beige;
   border-radius: 5px;
   padding: .7em;
@@ -11,9 +11,30 @@
   justify-content: space-between;  
   align-items: center;
 }
-.total::before {
+.total::before {  
   content: "AR$ : ";
 }
 .close {
   display: none;
+}
+.loader {  
+  visibility: hidden;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  z-index: 1021; /* Hay algo más elegante que esto? parece medio chapucero */
+  background: rgba(0, 0, 0);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+.loader-msg, .loader-text {
+  margin: .4em;
+  color: white;
+  align-self: center;
+}
+
+.hidden {
+  visibility: visible;
 }

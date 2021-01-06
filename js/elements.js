@@ -18,3 +18,4 @@ const modalCancelEl = document
 const modalConfirmEl = document
   .getElementById("modalConfirm")
   .addEventListener("click", modalConfirm);
+  const loaderEl = document.querySelector(".loader");

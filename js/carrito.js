@@ -165,7 +165,7 @@ function modalConfirm() {
   tableEl = document.createElement("table");
   theadEl = document.createElement("thead");
   tbodyEl = document.createElement("tbody");
-  getJSON();
+  loader();  
 }
 
 //actualiza stock en el JSON original
@@ -180,5 +180,14 @@ function editStock(index, stock) {
     }),
     headers: { "Content-Type": "application/JSON" },
   }).then((response) => response.json());
+}
+function loader() {
+  loaderEl.classList.toggle("hidden");   
+  setTimeout(() => {
+    getJSON(); 
+    loaderEl.classList.toggle("hidden");    
+    clearTimeout();    
+  }, 2000);  
+  
 }
 window.onload = getJSON();
