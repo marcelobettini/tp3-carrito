@@ -38,3 +38,12 @@
 .hidden {
   visibility: visible;
 }
+.cartline {
+  display: flex;    
+}
+.cartline-text {
+  align-self: center;
+}
+.btn-group{
+  margin-left: 1em;  
+}

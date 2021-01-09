@@ -104,7 +104,15 @@ function printCart() {
   let total = null;
   cartItem.forEach((el) => {
     const itemEl = document.createElement("p");
-    itemEl.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}`;
+    itemEl.innerHTML = `<div class="cartline">
+      <div class="cartline-text">
+        ${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}
+      </div>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-sm btn-secondary">+</button>
+        <button type="button" class="btn btn-sm btn-secondary">-</button>
+      </div>    
+    </div>`;
     total += el.precio * el.qtty;
     totalEl.innerText = total;
     shoppingList.appendChild(itemEl);
@@ -165,7 +173,7 @@ function modalConfirm() {
   tableEl = document.createElement("table");
   theadEl = document.createElement("thead");
   tbodyEl = document.createElement("tbody");
-  loader();  
+  loader();
 }
 
 //actualiza stock en el JSON original
@@ -179,15 +187,20 @@ function editStock(index, stock) {
       stock: stock,
     }),
     headers: { "Content-Type": "application/JSON" },
-  }).then((response) => response.json());
+  })
+    .then((response) => response.json())
+    .catch((err) => {
+      //el catch no estaba en el original, lo puse para debuguear pero no encontré error
+      console.log("error: ", err);
+    });
+  console.log("fetch ", id);
 }
 function loader() {
-  loaderEl.classList.toggle("hidden");   
+  loaderEl.classList.toggle("hidden");
   setTimeout(() => {
-    getJSON(); 
-    loaderEl.classList.toggle("hidden");    
-    clearTimeout();    
-  }, 2000);  
-  
+    getJSON();
+    loaderEl.classList.toggle("hidden");
+    clearTimeout();
+  }, 2000);
 }
 window.onload = getJSON();
