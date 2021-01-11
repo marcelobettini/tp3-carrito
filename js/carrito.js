@@ -99,32 +99,48 @@ function updateStock(id, btnShop) {
 }
 
 //carga el carrito
-function printCart() {
-  const shoppingList = document.getElementById("shoppingList");
+function printCart() {    
   let total = null;
-  cartItem.forEach((el) => {
-    const itemEl = document.createElement("p");
-    itemEl.innerHTML = `<div class="cartline">
-      <div class="cartline-text">
-        ${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}
-      </div>
-      <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-sm btn-secondary">+</button>
-        <button type="button" class="btn btn-sm btn-secondary">-</button>
-      </div>    
-    </div>`;
+  cartItem.forEach((el) => {        
+    const itemContainer= document.createElement("div");               //div contenedor de línea de carrito
+    itemContainer.className = "item-container";
+    const cartlineTxt = document.createElement("div");                //div hijo, contiene producto en un <p>
+    cartlineTxt.className = "cartline-text"
+    cartlineTxt.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}`;
+    const cartlineBtn = document.createElement("div");                //div hijo, contiene botones más y menos
+    cartlineBtn.classList.add("btn-group", "btn-group-sm", "btn-alert");  //clase Bootstrap p/ grupo de botones
+    cartlineBtn.setAttribute("role", "group")
+    cartlineBtn.setAttribute("aria-label", "botones + y -")
+    const btnPlus = document.createElement("button");                 //botón agregar unidad a producto en carrito
+    btnPlus.className = "btn";
+    const btnPlusTxt = document.createTextNode("+");
+    btnPlus.appendChild(btnPlusTxt);
+    const btnMinus = document.createElement("button");                 //botón restar unidad a producto en carrito
+    btnMinus.className = "btn";
+    const btnMinusTxt = document.createTextNode("-");
+    btnMinus.appendChild(btnMinusTxt);
+    cartlineBtn.appendChild(btnPlus);
+    cartlineBtn.appendChild(btnMinus);
+    itemContainer.appendChild(cartlineTxt)
+    itemContainer.appendChild(cartlineBtn)    
     total += el.precio * el.qtty;
     totalEl.innerText = total;
-    shoppingList.appendChild(itemEl);
-  });
+    cartBody.appendChild(itemContainer);   
+    btnPlus.dataset.id = cartItem.indexOf(el)      //asigno a dataset-id de cada botón index del array carrito
+    btnMinus.dataset.id = cartItem.indexOf(el)      
+  });  
 }
 
+function detectBtn(e) {
+  e.preventdefault;
+  console.log(e.target);
+}
 //limpia el carrito
 function refreshCart() {
-  shoppingList.querySelectorAll("p").forEach((node) => node.remove());
+  cartBody.querySelectorAll("div").forEach((node) => node.remove());
   totalEl.innerText = null;
 }
-
+//cancela la compra
 function cancelCart() {
   refreshCart();
   cartItem.forEach((e) => {
