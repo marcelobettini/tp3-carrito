@@ -85,7 +85,7 @@ function buildTableRows(data) {
       refreshCart();
       printCart();
     }
-    updateStock(id-1, btnShop, "minus");
+    updateStock(id - 1, btnShop, "minus");
   });
 }
 
@@ -115,7 +115,7 @@ function printCart() {
     itemContainer.className = "item-container";
     const cartlineTxt = document.createElement("div"); //div hijo, contiene producto en un <p>
     cartlineTxt.className = "cartline-text";
-    cartlineTxt.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}`;
+    cartlineTxt.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} / Cant: ${el.qtty}`;
     const cartlineBtn = document.createElement("div"); //div hijo, contiene botones más y menos
     cartlineBtn.classList.add("btn-group", "btn-group-sm", "btn-alert"); //clase Bootstrap p/ grupo de botones
     cartlineBtn.setAttribute("role", "group");
@@ -145,28 +145,25 @@ function printCart() {
 //funcionalidad de botones + y - PERO: queda enganchado con el último en la actualización
 function detectBtn(e) {
   e.preventdefault;
-  console.log(e.target.id)    
-  console.log(cartItem[e.target.dataset.id].id)
-   
-  switch (e.target.id) {    
+  switch (e.target.id) {
     case "btnMinus":
-      if (cartItem[e.target.dataset.id].qtty == 1) {        
-        cartItem.splice(e.target.dataset.id, 1)
+      if (cartItem[e.target.dataset.id].qtty == 1) {
+        cartItem.splice(e.target.dataset.id, 1);
         refreshCart();
-        printCart();           
-        updateStock(cartItem[e.target.dataset.id].id-1, btnShop, "plus");
+        printCart();
+        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
       } else {
         cartItem[e.target.dataset.id].qtty -= 1;
         refreshCart();
-        printCart();        
-        updateStock(cartItem[e.target.dataset.id].id-1, btnShop, "plus");
+        printCart();
+        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
       }
       break;
     case "btnPlus":
       cartItem[e.target.dataset.id].qtty += 1;
       refreshCart();
-      printCart();      
-      updateStock(cartItem[e.target.dataset.id].id-1, btnShop, "minus");
+      printCart();
+      updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "minus");
       break;
     default:
   }
@@ -185,7 +182,7 @@ function cancelCart() {
   cartItem = [];
 }
 
-//carga los productos del carrito en el modal
+//carga los productos del carrito en el modal cuando se presiona "pagar"
 function modalLoad() {
   const modalConfirmEl = document.getElementById("modalConfirm");
   if (cartItem.length == 0) {
@@ -196,18 +193,20 @@ function modalLoad() {
   let total = null;
   cartItem.forEach((el) => {
     const itemMdl = document.createElement("p");
-    itemMdl.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}`;
+    itemMdl.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} / Cant: ${el.qtty}`;
     total += el.precio * el.qtty;
-    totalEl.innerText = total;
     modalBodyEl.appendChild(itemMdl);
   });
-  modalBodyEl.appendChild(totalEl);
+  const totalMdl = document.createElement("p")
+  totalMdl.innerText = total;
+  totalMdl.className="total-mdl"
+  modalBodyEl.appendChild(totalMdl);
 }
 
 //limpia el modal
 function modalClear() {
   modalBodyEl.querySelectorAll("p").forEach((node) => node.remove());
-  totalEl.innerText = null;
+  // totalEl.innerText = null;
   cancelCart();
 }
 

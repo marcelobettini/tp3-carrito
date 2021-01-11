@@ -12,7 +12,10 @@
   align-items: center;
 }
 .total::before {  
-  content: "AR$ : ";
+  content: "Total AR$ : ";
+}
+.total-mdl::before {  
+  content: "Total AR$ : ";
 }
 .close {
   display: none;
