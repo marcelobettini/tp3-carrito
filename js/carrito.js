@@ -85,55 +85,91 @@ function buildTableRows(data) {
       refreshCart();
       printCart();
     }
-    updateStock(id, btnShop);
+    updateStock(id-1, btnShop, "minus");
   });
 }
 
 //actualiza stock provisoriamente en la tabla (no en el array ni en la base de datos)
-function updateStock(id, btnShop) {
-  if (tableEl.rows[id - 1].cells[5].innerText == 0) {
+function updateStock(id, btnShop, operation) {
+  if (tableEl.rows[id].cells[5].innerText == 0) {
     btnShop.disabled = true;
   } else {
-    tableEl.rows[id - 1].cells[5].innerText -= 1;
+    switch (operation) {
+      case "minus":
+        tableEl.rows[id].cells[5].innerText -= 1;
+        break;
+      case "plus":
+        let num = Number(tableEl.rows[id].cells[5].innerText);
+        tableEl.rows[id].cells[5].innerText = num + 1;
+        break;
+      default:
+    }
   }
 }
 
 //carga el carrito
-function printCart() {    
+function printCart() {
   let total = null;
-  cartItem.forEach((el) => {        
-    const itemContainer= document.createElement("div");               //div contenedor de línea de carrito
+  cartItem.forEach((el) => {
+    const itemContainer = document.createElement("div"); //div contenedor de línea de carrito
     itemContainer.className = "item-container";
-    const cartlineTxt = document.createElement("div");                //div hijo, contiene producto en un <p>
-    cartlineTxt.className = "cartline-text"
+    const cartlineTxt = document.createElement("div"); //div hijo, contiene producto en un <p>
+    cartlineTxt.className = "cartline-text";
     cartlineTxt.innerText = `${el.item} ${el.marca} / ${el.presentacion} / $${el.precio} Cant: ${el.qtty}`;
-    const cartlineBtn = document.createElement("div");                //div hijo, contiene botones más y menos
-    cartlineBtn.classList.add("btn-group", "btn-group-sm", "btn-alert");  //clase Bootstrap p/ grupo de botones
-    cartlineBtn.setAttribute("role", "group")
-    cartlineBtn.setAttribute("aria-label", "botones + y -")
-    const btnPlus = document.createElement("button");                 //botón agregar unidad a producto en carrito
+    const cartlineBtn = document.createElement("div"); //div hijo, contiene botones más y menos
+    cartlineBtn.classList.add("btn-group", "btn-group-sm", "btn-alert"); //clase Bootstrap p/ grupo de botones
+    cartlineBtn.setAttribute("role", "group");
+    cartlineBtn.setAttribute("aria-label", "botones + y -");
+    const btnPlus = document.createElement("button"); //botón agregar unidad a producto en carrito
     btnPlus.className = "btn";
+    btnPlus.id = "btnPlus";
     const btnPlusTxt = document.createTextNode("+");
     btnPlus.appendChild(btnPlusTxt);
-    const btnMinus = document.createElement("button");                 //botón restar unidad a producto en carrito
+    const btnMinus = document.createElement("button"); //botón restar unidad a producto en carrito
     btnMinus.className = "btn";
+    btnMinus.id = "btnMinus";
     const btnMinusTxt = document.createTextNode("-");
     btnMinus.appendChild(btnMinusTxt);
     cartlineBtn.appendChild(btnPlus);
     cartlineBtn.appendChild(btnMinus);
-    itemContainer.appendChild(cartlineTxt)
-    itemContainer.appendChild(cartlineBtn)    
+    itemContainer.appendChild(cartlineTxt);
+    itemContainer.appendChild(cartlineBtn);
     total += el.precio * el.qtty;
     totalEl.innerText = total;
-    cartBody.appendChild(itemContainer);   
-    btnPlus.dataset.id = cartItem.indexOf(el)      //asigno a dataset-id de cada botón index del array carrito
-    btnMinus.dataset.id = cartItem.indexOf(el)      
-  });  
+    cartBody.appendChild(itemContainer);
+    btnPlus.dataset.id = cartItem.indexOf(el); //asigno a dataset-id de cada botón index del array carrito
+    btnMinus.dataset.id = cartItem.indexOf(el);
+  });
 }
 
+//funcionalidad de botones + y - PERO: queda enganchado con el último en la actualización
 function detectBtn(e) {
   e.preventdefault;
-  console.log(e.target);
+  console.log(e.target.id)    
+  console.log(cartItem[e.target.dataset.id].id)
+   
+  switch (e.target.id) {    
+    case "btnMinus":
+      if (cartItem[e.target.dataset.id].qtty == 1) {        
+        cartItem.splice(e.target.dataset.id, 1)
+        refreshCart();
+        printCart();           
+        updateStock(cartItem[e.target.dataset.id].id-1, btnShop, "plus");
+      } else {
+        cartItem[e.target.dataset.id].qtty -= 1;
+        refreshCart();
+        printCart();        
+        updateStock(cartItem[e.target.dataset.id].id-1, btnShop, "plus");
+      }
+      break;
+    case "btnPlus":
+      cartItem[e.target.dataset.id].qtty += 1;
+      refreshCart();
+      printCart();      
+      updateStock(cartItem[e.target.dataset.id].id-1, btnShop, "minus");
+      break;
+    default:
+  }
 }
 //limpia el carrito
 function refreshCart() {
