@@ -142,28 +142,28 @@ function printCart() {
   });
 }
 
-//funcionalidad de botones + y - PERO: queda enganchado con el último en la actualización
+//funcionalidad de botones + y -
 function detectBtn(e) {
   e.preventdefault;
   switch (e.target.id) {
     case "btnMinus":
       if (cartItem[e.target.dataset.id].qtty == 1) {
+        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
         cartItem.splice(e.target.dataset.id, 1);
         refreshCart();
         printCart();
-        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
       } else {
+        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
         cartItem[e.target.dataset.id].qtty -= 1;
         refreshCart();
         printCart();
-        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
       }
       break;
     case "btnPlus":
+      updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "minus");
       cartItem[e.target.dataset.id].qtty += 1;
       refreshCart();
       printCart();
-      updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "minus");
       break;
     default:
   }
@@ -197,9 +197,9 @@ function modalLoad() {
     total += el.precio * el.qtty;
     modalBodyEl.appendChild(itemMdl);
   });
-  const totalMdl = document.createElement("p")
+  const totalMdl = document.createElement("p");
   totalMdl.innerText = total;
-  totalMdl.className="total-mdl"
+  totalMdl.className = "total-mdl";
   modalBodyEl.appendChild(totalMdl);
 }
 
