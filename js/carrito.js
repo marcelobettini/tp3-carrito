@@ -65,6 +65,7 @@ function buildTableRows(data) {
   trEl.appendChild(btnShop);
   tableEl.appendChild(tbodyEl);
   btnShop.addEventListener("click", (ev) => {
+    console.log(ev.target.dataset.id)    
     id = ev.target.dataset.id;
     idCheck = id;
     const item = productos[ev.target.dataset.id - 1].item;
@@ -72,7 +73,8 @@ function buildTableRows(data) {
     const presentacion = productos[ev.target.dataset.id - 1].presentacion;
     const precio = productos[ev.target.dataset.id - 1].precio;
     const qtty = 1;
-    const newItem = { id, item, marca, presentacion, precio, qtty };
+    const rowIdx = ev.target.parentNode.rowIndex
+    const newItem = { id, item, marca, presentacion, precio, qtty, rowIdx };
     let idx = cartItem.findIndex((element) => {
       return element.id == id;
     });
@@ -85,7 +87,7 @@ function buildTableRows(data) {
       refreshCart();
       printCart();
     }
-    updateStock(id - 1, btnShop, "minus");
+    updateStock(rowIdx, btnShop, "minus");
   });
 }
 
@@ -147,20 +149,20 @@ function detectBtn(e) {
   e.preventdefault;
   switch (e.target.id) {
     case "btnMinus":
-      if (cartItem[e.target.dataset.id].qtty == 1) {
-        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
+      if (cartItem[e.target.dataset.id].qtty == 1) {        
+        updateStock(cartItem[e.target.dataset.id].rowIdx, btnShop, "plus");
         cartItem.splice(e.target.dataset.id, 1);
         refreshCart();
         printCart();
       } else {
-        updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "plus");
+        updateStock(cartItem[e.target.dataset.id].rowIdx, btnShop, "plus");
         cartItem[e.target.dataset.id].qtty -= 1;
         refreshCart();
         printCart();
       }
       break;
     case "btnPlus":
-      updateStock(cartItem[e.target.dataset.id].id - 1, btnShop, "minus");
+      updateStock(cartItem[e.target.dataset.id].rowIdx, btnShop, "minus");
       cartItem[e.target.dataset.id].qtty += 1;
       refreshCart();
       printCart();
