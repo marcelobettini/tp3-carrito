@@ -65,15 +65,17 @@ function buildTableRows(data) {
   trEl.appendChild(btnShop);
   tableEl.appendChild(tbodyEl);
   btnShop.addEventListener("click", (ev) => {
-    console.log(ev.target.dataset.id)    
+    
+    console.log("ev.target.dataset.id",ev.target.dataset.id)    
+    console.log("ev.target.parentNode.rowIndex",ev.target.parentNode.rowIndex)    
     id = ev.target.dataset.id;
     idCheck = id;
-    const item = productos[ev.target.dataset.id - 1].item;
-    const marca = productos[ev.target.dataset.id - 1].marca;
-    const presentacion = productos[ev.target.dataset.id - 1].presentacion;
-    const precio = productos[ev.target.dataset.id - 1].precio;
+    const item = productos[ev.target.parentNode.rowIndex].item; //no accedo a tabla de productos por id pues puede haber gaps por id de productos eliminados en el JSON original
+    const marca = productos[ev.target.parentNode.rowIndex].marca;
+    const presentacion = productos[ev.target.parentNode.rowIndex].presentacion;
+    const precio = productos[ev.target.parentNode.rowIndex].precio;
     const qtty = 1;
-    const rowIdx = ev.target.parentNode.rowIndex
+    const rowIdx = ev.target.parentNode.rowIndex //agrego una referencia a la posición que cada item de carrito ocupa en la tabla de productos
     const newItem = { id, item, marca, presentacion, precio, qtty, rowIdx };
     let idx = cartItem.findIndex((element) => {
       return element.id == id;
@@ -215,6 +217,7 @@ function modalClear() {
 //confirma la compra
 function modalConfirm() {
   cartItem.forEach((e) => {
+    console.log(tableEl.rows[e.id - 1].cells[5].innerText)
     editStock(e.id, tableEl.rows[e.id - 1].cells[5].innerText);
   });
   tableEl.remove();
