@@ -64,10 +64,7 @@ function buildTableRows(data) {
   }
   trEl.appendChild(btnShop);
   tableEl.appendChild(tbodyEl);
-  btnShop.addEventListener("click", (ev) => {
-    
-    console.log("ev.target.dataset.id",ev.target.dataset.id)    
-    console.log("ev.target.parentNode.rowIndex",ev.target.parentNode.rowIndex)    
+  btnShop.addEventListener("click", (ev) => {   
     id = ev.target.dataset.id;
     idCheck = id;
     const item = productos[ev.target.parentNode.rowIndex].item; //no accedo a tabla de productos por id pues puede haber gaps por id de productos eliminados en el JSON original
@@ -92,7 +89,6 @@ function buildTableRows(data) {
     updateStock(rowIdx, btnShop, "minus");
   });
 }
-
 //actualiza stock provisoriamente en la tabla (no en el array ni en la base de datos)
 function updateStock(id, btnShop, operation) {
   if (tableEl.rows[id].cells[5].innerText == 0) {
@@ -110,7 +106,6 @@ function updateStock(id, btnShop, operation) {
     }
   }
 }
-
 //carga el carrito
 function printCart() {
   let total = null;
@@ -145,7 +140,6 @@ function printCart() {
     btnMinus.dataset.id = cartItem.indexOf(el);
   });
 }
-
 //funcionalidad de botones + y -
 function detectBtn(e) {
   e.preventdefault;
@@ -217,8 +211,8 @@ function modalClear() {
 //confirma la compra
 function modalConfirm() {
   cartItem.forEach((e) => {
-    console.log(tableEl.rows[e.id - 1].cells[5].innerText)
-    editStock(e.id, tableEl.rows[e.id - 1].cells[5].innerText);
+    console.log(tableEl.rows[e.rowIdx].cells[5].innerText)
+    editStock(e.id, tableEl.rows[e.rowIdx].cells[5].innerText);
   });
   tableEl.remove();
   cancelCart();
@@ -234,9 +228,8 @@ function modalConfirm() {
 
 //actualiza stock en el JSON original
 function editStock(index, stock) {
-  const slash = "/";
-  const id = productos[index - 1].id;
-  const combinedURL = url.concat(slash + id);
+  const slash = "/";  
+  const combinedURL = url.concat(slash + index);
   fetch(combinedURL, {
     method: "PUT",
     body: JSON.stringify({
@@ -248,8 +241,7 @@ function editStock(index, stock) {
     .catch((err) => {
       //el catch no estaba en el original, lo puse para debuguear pero no encontré error
       console.log("error: ", err);
-    });
-  console.log("fetch ", id);
+    });  
 }
 function loader() {
   loaderEl.classList.toggle("hidden");
